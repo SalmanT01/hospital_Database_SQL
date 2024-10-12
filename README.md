@@ -3,16 +3,80 @@
 ## Introduction
 The Hospital Database Management System is designed to streamline the process of patient management, appointment booking, and medical record maintenance. This system enhances efficiency by automating tasks such as patient registration, appointment scheduling, and the management of medical records. By utilizing stored procedures and triggers, it ensures data integrity and offers a user-friendly interface for both patients and healthcare providers.
 
-## Tables Overview
+## Tables and Schema Description:
 
-- **Patient Table**: Basic patient information, with Patient ID as the primary key.
-- **PatientContact Table**: Stores contact information (Email, Telephone).
-- **PatientLoginInfo Table**: Contains login details with hashed passwords.
-- **Department Table**: Stores department names and IDs.
-- **Doctors Table**: Contains doctor details, with Doctor ID as the primary key.
-- **Appointments Table**: Holds appointment data, with Appointment ID as the primary key and Patient ID as a foreign key.
-- **Past Appointments Table**: Records completed appointments.
-- **Medical Records Table**: Stores patient medical history.
+1. **Patient Table:**
+   - **Columns:**
+     - `PatientID` (INT, Primary Key, IDENTITY)
+     - `FirstName` (NVARCHAR(n), NOT NULL)
+     - `MiddleName` (NVARCHAR(n), NULL)
+     - `LastName` (NVARCHAR(n), NOT NULL)
+     - `Address` (NVARCHAR(n), NOT NULL)
+     - `PostCode` (NVARCHAR(n), NOT NULL)
+     - `DateOfBirth` (DATE, NOT NULL)
+     - `HealthInsuranceNumber` (NVARCHAR(n), NOT NULL)
+
+2. **PatientsContact Table:**
+   - **Columns:**
+     - `ContactID` (INT, Primary Key, IDENTITY)
+     - `PatientID` (INT, Foreign Key referencing Patient Table)
+     - `EmailAddress` (NVARCHAR(n), NULL, UNIQUE, CHECK format)
+     - `ContactNumber` (NVARCHAR(n), NULL)
+
+3. **PatientLoginInfo Table:**
+   - **Columns:**
+     - `LoginInfoID` (INT, Primary Key, IDENTITY)
+     - `UserName` (NVARCHAR(n), NOT NULL)
+     - `Password` (NVARCHAR(100), NOT NULL, HASHBYTES for encryption)
+     - `PatientID` (INT, Foreign Key referencing Patient Table)
+
+4. **Department Table:**
+   - **Columns:**
+     - `DepartmentID` (INT, Primary Key, IDENTITY)
+     - `DepartmentName` (NVARCHAR(n), NOT NULL)
+
+5. **Doctors Table:**
+   - **Columns:**
+     - `DoctorID` (INT, Primary Key, IDENTITY)
+     - `DoctorName` (NVARCHAR(n), NOT NULL)
+     - `DepartmentID` (INT, Foreign Key referencing Department Table)
+
+6. **Appointments Table:**
+   - **Columns:**
+     - `AppointmentID` (INT, Primary Key, IDENTITY)
+     - `PatientID` (INT, Foreign Key referencing Patient Table)
+     - `AppointmentDate` (DATE, NOT NULL)
+     - `AppointmentTime` (TIME, NOT NULL)
+     - `DepartmentID` (INT, Foreign Key referencing Department Table)
+     - `AppointmentStatus` (NVARCHAR(n), NOT NULL)
+     - `DoctorID` (INT, Foreign Key referencing Doctors Table)
+
+7. **Past Appointments Table:**
+   - **Columns:**
+     - `PastAppointmentID` (INT, Primary Key, NOT NULL)
+     - `PatientID` (INT, Foreign Key referencing Patient Table)
+     - `PastAppointmentDate` (DATE, NOT NULL)
+     - `PastAppointmentTime` (TIME, NOT NULL)
+     - `DepartmentID` (INT, Foreign Key referencing Department Table)
+     - `AppointmentStatus` (NVARCHAR(n), NOT NULL)
+     - `DoctorID` (INT, Foreign Key referencing Doctors Table)
+
+8. **Medical Records Table:**
+   - **Columns:**
+     - `MedicalRecordID` (INT, Primary Key, IDENTITY)
+     - `PatientID` (INT, Foreign Key referencing Patient Table)
+     - `Diagnosis` (NVARCHAR(n), NOT NULL)
+     - `Medicines` (NVARCHAR(n), NOT NULL)
+     - `Allergies` (NVARCHAR(n), NULL)
+     - `DoctorID` (INT, Foreign Key referencing Doctors Table)
+
+9. **Hospital Archive Table:**
+   - **Columns:**
+     - `HospitalArchiveID` (INT, Primary Key, NOT NULL, IDENTITY)
+     - `PatientID` (INT, Foreign Key referencing Patient Table)
+     - `DoctorID` (INT, NOT NULL)
+     - `MedicalRecordID` (INT, Foreign Key referencing Medical Records Table)
+     - `PatientDischargeDate` (DATE, NOT NULL)
 
 ## Database Diagram
 
